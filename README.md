@@ -1,2 +1,2 @@
 # Ajedrez
-Para el proyecto de progra 2
+Pa crear el ajedrez
