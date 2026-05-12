@@ -35,9 +35,7 @@ bool caminoLibreDiag(char tab[8][8], int fo, int co, int fd, int cd) {
     return true;
 }
 
-// ─────────────────────────────────────────
 // PEÓN
-// ─────────────────────────────────────────
 
 bool validarPeon(char tab[8][8], int fo, int co, int fd, int cd, int turno) {
     char destino = tab[fd][cd];
@@ -52,7 +50,7 @@ bool validarPeon(char tab[8][8], int fo, int co, int fd, int cd, int turno) {
             return true;
 
         if (fd == fo + 1 && (cd == co + 1 || cd == co - 1)
-            && destino != VACIA && esCasillaNegra(fd, cd))
+            && destino >= 'a' && destino <= 'z')
             return true;
     }
     else {
@@ -65,7 +63,7 @@ bool validarPeon(char tab[8][8], int fo, int co, int fd, int cd, int turno) {
             return true;
 
         if (fd == fo - 1 && (cd == co + 1 || cd == co - 1)
-            && destino != VACIA && esCasillaBlanca(fd, cd))
+            && destino >= 'A' && destino <= 'Z')
             return true;
     }
 
@@ -95,23 +93,24 @@ void coronarPeon(char tab[8][8], int fila, int col) {
     }
 }
 
-// ─────────────────────────────────────────
 // TORRE
-// ─────────────────────────────────────────
 
 bool validarTorre(char tab[8][8], int fo, int co, int fd, int cd) {
 
     if (fo != fd && co != cd) return false;
 
-    if (esCasillaBlanca(fo, co) && esCasillaBlanca(fd, cd)) return false;
-    if (esCasillaNegra(fo, co)  && esCasillaNegra(fd, cd))  return false;
+    char origen  = tab[fo][co];
+    char destino = tab[fd][cd];
+
+    if (destino != VACIA) {
+        if (origen >= 'A' && origen <= 'Z' && destino >= 'A' && destino <= 'Z') return false;
+        if (origen >= 'a' && origen <= 'z' && destino >= 'a' && destino <= 'z') return false;
+    }
 
     return caminoLibreRecto(tab, fo, co, fd, cd);
 }
 
-// ─────────────────────────────────────────
 // ALFIL
-// ─────────────────────────────────────────
 
 bool validarAlfil(char tab[8][8], int fo, int co, int fd, int cd) {
     int dF = abs(fd - fo);
@@ -119,8 +118,13 @@ bool validarAlfil(char tab[8][8], int fo, int co, int fd, int cd) {
 
     if (dF != dC || dF == 0) return false;
 
-    if (esCasillaBlanca(fo, co) && esCasillaBlanca(fd, cd)) return false;
-    if (esCasillaNegra(fo, co)  && esCasillaNegra(fd, cd))  return false;
+    char origen  = tab[fo][co];
+    char destino = tab[fd][cd];
+
+    if (destino != VACIA) {
+        if (origen >= 'A' && origen <= 'Z' && destino >= 'A' && destino <= 'Z') return false;
+        if (origen >= 'a' && origen <= 'z' && destino >= 'a' && destino <= 'z') return false;
+    }
 
     return caminoLibreDiag(tab, fo, co, fd, cd);
 }
