@@ -15,4 +15,4 @@ bool validarAlfil(char tablero[8][8], int fo, int co, int fd, int cd);
 
 bool caminoLibreRecto(char tab[8][8], int fo, int co, int fd, int cd);
 
-#endif //AJEDREZ_PIEZAS_BASICAS_H holaadjfoefef
+#endif //AJEDREZ_PIEZAS_BASICAS_H
