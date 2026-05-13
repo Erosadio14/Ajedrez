@@ -12,8 +12,8 @@ bool esCasillaNegra(int fila, int col) {
 }
 
 void lexCasilla(const char* casilla, int* fila, int* col) {
-    *col = casilla[0] - 'A';          // A-H → 0-7
-    *fila = 8 - (casilla[1] - '0');   // 1-8 → 7-0
+    *col = casilla[0] - 'A';
+    *fila = casilla[1] - '1';
 }
 
 void moverPieza(char tablero[8][8], int f1, int c1, int f2, int c2) {
