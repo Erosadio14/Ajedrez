@@ -69,6 +69,8 @@ void mostrarInstrucciones() {
 
         cout << "======= INSTRUCCIONES =======" << endl;
         cout << "- Las blancas se mueven primero." << endl;
+        cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+        cout << "- Columnas: A-H | Filas: 1-8" << endl;
         cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
 
         cout << endl;
@@ -99,20 +101,25 @@ void mostrarInstrucciones() {
 void mostrarIntegrantes() {
 
     cout << "======== INTEGRANTES ======" << endl;
-    cout << "Integrante 1-blancas : " << endl;
-    cout << "Integrante 2-blancas : " << endl;
-    cout << "Integrante 1-negras : " << endl;
-    cout << "Integrante 2-negras : " << endl;
+    cout << "Integrante 1: Kihara Mamani" << endl;
+    cout << "Integrante 2: Adrián Rosadio " << endl;
+    cout << "Integrante 1: Adrian Cespedes" << endl;
+    cout << "Integrante 2: Asael Herrera" << endl;
+    cout << endl;
 
 }
 void mostrarConsideraciones() {
     cout << "======== CONSIDERACIONES ======" << endl;
+    cout << "- Peon al paso: NO implementado." << endl;
+    cout << "- Jaque / Jaque mate: NO implementado." << endl;
+    cout << "- Enroque sin verificacion de jaque." << endl;
+    cout << "- El juego termina por captura del rey o rendicion." << endl;
+    cout << endl;
 }
 
 //LOGICA DE MOVIMIENTO
 
-void moverTurno(char tablero[8][8], int turno, bool& juegoActivo,
-                const string& jugador1, const string& jugador2) {
+void moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& jugador1, const string& jugador2) {
 
     string entradaOrigen, entradaDestino;
     int fo, co, fd, cd;
@@ -149,6 +156,7 @@ void moverTurno(char tablero[8][8], int turno, bool& juegoActivo,
 
     cout << "Casilla de DESTINO (ej. E4): ";
     cin >> entradaDestino;
+
 
     if (!parsearCasilla(entradaDestino, fd, cd)) {
         cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E4) *****\n" << endl;
@@ -195,15 +203,15 @@ void moverTurno(char tablero[8][8], int turno, bool& juegoActivo,
     // Verificar fin de juego por captura de rey
     if (piezaCapturada == REY_B) {
         imprimirTablero(tablero);
-        cout << "~~~ REY BLANCO ELIMINADO ~~~" << endl;
-        cout << "~~~~~ GANADOR: " << jugador2 << " (PIEZAS NEGRAS) ~~~~~" << endl;
-        cout << "~~~~~ FIN DEL JUEGO ~~~~~\n" << endl;
+        cout << "--- REY BLANCO ELIMINADO ---" << endl;
+        cout << "----- GANADOR: " << jugador2 << " (PIEZAS NEGRAS) -----" << endl;
+        cout << "----- FIN DEL JUEGO -----\n" << endl;
         juegoActivo = false;
     } else if (piezaCapturada == REY_N) {
         imprimirTablero(tablero);
-        cout << "~~~ REY NEGRO ELIMINADO ~~~" << endl;
-        cout << "~~~~~ GANADOR: " << jugador1 << " (PIEZAS BLANCAS) ~~~~~" << endl;
-        cout << "~~~~~ FIN DEL JUEGO ~~~~~\n" << endl;
+        cout << "--- REY NEGRO ELIMINADO ---" << endl;
+        cout << "----- GANADOR: " << jugador1 << " (PIEZAS BLANCAS) -----" << endl;
+        cout << "----- FIN DEL JUEGO -----\n" << endl;
         juegoActivo = false;
     }
 }
@@ -233,13 +241,17 @@ void jugar() {
 
         cout << "Turno de " << nombreTurno << " - " << colorTurno << endl;
         cout <<"1. Mover pieza" << endl;
-        cout <<"2. Rendirse" << endl;
+        cout <<"0. Rendirse" << endl;
         do {
             cout << "Seleccione una opcion: ";
-            cin >> opcion;
-        }while (opcion < 1 || opcion > 2);
+            if (!(cin >> opcion)) {  // si falla (ej: escribiste "E4")
+                cin.clear();          // limpia el error
+                cin.ignore(1000, '\n'); // limpia el buffer
+                opcion = -1;          // fuerza repetir el loop
+            }
+        } while (opcion < 0 || opcion > 1);
 
-        if (opcion == 2) {
+        if (opcion == 1) {
             string ganador= (turno == TURNO_BLANCAS) ? jugador2 : jugador1;
             string colorGanador = (turno == TURNO_BLANCAS) ? "NEGRAS" : "BLANCAS";
             cout << nombreTurno << " se rindio." << endl;
