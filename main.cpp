@@ -304,6 +304,8 @@ int main() {
             cin.clear();
             cin.ignore(1000, '\n');
             opcion = -1;
+        } else {
+            cin.ignore(1000, '\n');
         }
 
         switch(opcion) {
@@ -323,15 +325,18 @@ int main() {
                 cout << "¡Hasta la proxima! Gracias por jugar El Gambito de UTEC." << endl;
                 break;
             default:
-                cout << "====== MENU PRINCIPAL ======" << endl;
-                cout << "  0. Instrucciones" << endl;
-                cout << "  1. Integrantes" << endl;
-                cout << "  2. Consideraciones" << endl;
-                cout << "  3. Jugar" << endl;
-                cout << "  4. Salir" << endl;
-                cout << "============================" << endl;
                 cout << "Opcion no valida. Intente de nuevo." << endl;
                 break;
+        }
+
+        if (opcion != 4) {
+            cout << "====== MENU PRINCIPAL ======" << endl;
+            cout << "  0. Instrucciones" << endl;
+            cout << "  1. Integrantes" << endl;
+            cout << "  2. Consideraciones" << endl;
+            cout << "  3. Jugar" << endl;
+            cout << "  4. Salir" << endl;
+            cout << "============================" << endl;
         }
 
     } while(opcion != 4);
