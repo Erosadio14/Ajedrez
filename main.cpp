@@ -78,7 +78,11 @@ void mostrarInstrucciones() {
         cout << "2. Salir del juego" << endl;
 
         cout << "Seleccione una opcion: ";
-        cin >> opcion;
+        if (!(cin >> opcion)) {   // si falla (
+            cin.clear();          // limpia el error
+            cin.ignore(1000, '\n'); // limpia el buffer
+            opcion = -1;          // fuerza repetir el loop
+        }
 
         switch(opcion) {
 
@@ -293,8 +297,11 @@ int main() {
         cout << "============================" << endl;
 
         cout << "Seleccione una opcion: ";
-        cin >> opcion;
-
+        if (!(cin >> opcion)) {   // si falla (
+            cin.clear();          // limpia el error
+            cin.ignore(1000, '\n'); // limpia el buffer
+            opcion = -1;          // fuerza repetir el loop
+        }
         switch(opcion) {
 
             case 0:
