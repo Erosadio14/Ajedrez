@@ -1,7 +1,7 @@
 # Instrucciones para compular El Gambito de UTEC
 Requisitos: Clion instalado con compilador C++
 
-# Pasos:
+Pasos:
 1. Descomprimir el archibo .zip en una carpeta de tu elección.
 2. Abrir CLion.
 3. Seleccionar Open y navegar hasta la carpeta descomprimida.
@@ -9,3 +9,9 @@ Requisitos: Clion instalado con compilador C++
 5. Esperar a que Clion termine de indexar el proyecto.
 6. Presionar el botón Run (triangulo verde) para ejecutar el codigo (debe estar seleccionada la carpeta entera).
 7. El juego se ejecutará en la terminal de CLion.
+
+Controles:
+
+Ingresar casillas en formato ColFila, por ejemplo E2.
+Columnas: A a H — Filas: 1 a 8.
+Las piezas blancas siempre mueven primero.
