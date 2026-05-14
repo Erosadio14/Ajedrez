@@ -62,40 +62,41 @@ bool manejarEnroque(char tab[8][8], int fo, int co, int fd, int cd, int turno) {
 
 //MENU
 void mostrarInstrucciones() {
-
     int opcion;
 
+    cout << "======= INSTRUCCIONES =======" << endl;
+    cout << "- Las blancas se mueven primero." << endl;
+    cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+    cout << "- Columnas: A-H | Filas: 1-8" << endl;
+    cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
+    cout << endl;
+    cout << "1. Volver al menu" << endl;
+    cout << "2. Salir del juego" << endl;
+
     do {
-
-        cout << "======= INSTRUCCIONES =======" << endl;
-        cout << "- Las blancas se mueven primero." << endl;
-        cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
-        cout << "- Columnas: A-H | Filas: 1-8" << endl;
-        cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
-
-        cout << endl;
-        cout << "1. Volver al menu" << endl;
-        cout << "2. Salir del juego" << endl;
-
         cout << "Seleccione una opcion: ";
-        if (!(cin >> opcion)) {   // si falla (
-            cin.clear();          // limpia el error
-            cin.ignore(1000, '\n'); // limpia el buffer
-            opcion = -1;          // fuerza repetir el loop
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
         }
 
         switch(opcion) {
-
             case 1:
                 break;
-
             case 2:
                 cout << "Gracias por jugar." << endl;
                 exit(0);
             default:
-                cout << "Opcion no valida. Intente de nuevo." << endl;
+                cout << "======= INSTRUCCIONES =======" << endl;
+                cout << "- Las blancas se mueven primero." << endl;
+                cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+                cout << "- Columnas: A-H | Filas: 1-8" << endl;
+                cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
                 cout << endl;
-
+                cout << "1. Volver al menu" << endl;
+                cout << "2. Salir del juego" << endl;
+                cout << "Opcion no valida. Intente de nuevo." << endl;
         }
 
     } while(opcion != 1);
@@ -106,9 +107,9 @@ void mostrarIntegrantes() {
 
     cout << "======== INTEGRANTES ======" << endl;
     cout << "Integrante 1: Kihara Mamani" << endl;
-    cout << "Integrante 2: Adrián Rosadio " << endl;
-    cout << "Integrante 1: Adrian Cespedes" << endl;
-    cout << "Integrante 2: Asael Herrera" << endl;
+    cout << "Integrante 2: Adrian Rosadio " << endl;
+    cout << "Integrante 3: Adrian Cespedes" << endl;
+    cout << "Integrante 4: Asael Herrera" << endl;
     cout << endl;
 
 }
@@ -123,7 +124,7 @@ void mostrarConsideraciones() {
 
 //LOGICA DE MOVIMIENTO
 
-void moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& jugador1, const string& jugador2) {
+bool moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& jugador1, const string& jugador2) {
 
     string entradaOrigen, entradaDestino;
     int fo, co, fd, cd;
@@ -133,60 +134,59 @@ void moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& 
 
     if (!parsearCasilla(entradaOrigen, fo, co)) {
         cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E2) *****\n" << endl;
-        return;
+        return false;
     }
 
     if (!validarRango(fo, co)) {
         cout << "\n***** Movimiento NO VALIDO : casilla fuera de rango *****\n" << endl;
-        return;
+        return false;
     }
 
     char piezaOrigen = tablero[fo][co];
 
     if (piezaOrigen == VACIA) {
         cout << "\n***** Movimiento NO VALIDO : no hay pieza en la casilla de origen *****\n" << endl;
-        return;
+        return false;
     }
 
     if (turno == TURNO_BLANCAS && piezaOrigen >= 'a' && piezaOrigen <= 'z') {
         cout << "\n***** Movimiento NO VALIDO : solo puedes mover piezas BLANCAS *****\n" << endl;
-        return;
+        return false;
     }
 
     if (turno == TURNO_NEGRAS && piezaOrigen >= 'A' && piezaOrigen <= 'Z') {
         cout << "\n***** Movimiento NO VALIDO : solo puedes mover piezas NEGRAS *****\n" << endl;
-        return;
+        return false;
     }
 
     cout << "Casilla de DESTINO (ej. E4): ";
     cin >> entradaDestino;
 
-
     if (!parsearCasilla(entradaDestino, fd, cd)) {
         cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E4) *****\n" << endl;
-        return;
+        return false;
     }
 
     if (!validarRango(fd, cd)) {
         cout << "\n***** Movimiento NO VALIDO : casilla fuera de rango *****\n" << endl;
-        return;
+        return false;
     }
 
     if (fo == fd && co == cd) {
         cout << "\n***** Movimiento NO VALIDO : debes mover a una casilla diferente *****\n" << endl;
-        return;
+        return false;
     }
 
     // Verificar enroque
     if (manejarEnroque(tablero, fo, co, fd, cd, turno)) {
         cout << "\nEnroque realizado." << endl;
-        return;
+        return true;
     }
 
     // Validar movimiento segun la pieza
     if (!esMovimientoValido(tablero, fo, co, fd, cd, turno)) {
         cout << "\n***** Movimiento NO VALIDO : movimiento no permitido para esta pieza *****\n" << endl;
-        return;
+        return false;
     }
 
     // Guardar pieza capturada
@@ -194,6 +194,8 @@ void moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& 
 
     // Actualizar flag si se mueve una torre
     actualizarFlagTorre(fo, co);
+    if (piezaOrigen == REY_B) reyBlancoMovido = true;
+    if (piezaOrigen == REY_N) reyNegroMovido  = true;
 
     // Aplicar movimiento
     moverPieza(tablero, fo, co, fd, cd);
@@ -218,6 +220,8 @@ void moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& 
         cout << "----- FIN DEL JUEGO -----\n" << endl;
         juegoActivo = false;
     }
+
+    return true;  // CAMBIO
 }
 
 void jugar() {
@@ -247,7 +251,7 @@ void jugar() {
         cout <<"1. Mover pieza" << endl;
         cout <<"0. Rendirse" << endl;
         do {
-            cout << "Seleccione una opcion: ";
+            cout << "Seleccione una opcion: " << endl;
             if (!(cin >> opcion)) {  // si falla (ej: escribiste "E4")
                 cin.clear();          // limpia el error
                 cin.ignore(1000, '\n'); // limpia el buffer
@@ -255,7 +259,7 @@ void jugar() {
             }
         } while (opcion < 0 || opcion > 1);
 
-        if (opcion == 1) {
+        if (opcion == 0) {
             string ganador= (turno == TURNO_BLANCAS) ? jugador2 : jugador1;
             string colorGanador = (turno == TURNO_BLANCAS) ? "NEGRAS" : "BLANCAS";
             cout << nombreTurno << " se rindio." << endl;
@@ -264,9 +268,9 @@ void jugar() {
             cout << endl;
             juegoActivo = false;
         } else {
-            moverTurno(tablero,turno, juegoActivo, jugador1,jugador2);
-            if (juegoActivo) {
-                turno = (turno ==TURNO_BLANCAS) ? TURNO_NEGRAS : TURNO_BLANCAS;
+            bool movimientoExitoso = moverTurno(tablero, turno, juegoActivo, jugador1, jugador2);
+            if (juegoActivo && movimientoExitoso) {
+                turno = (turno == TURNO_BLANCAS) ? TURNO_NEGRAS : TURNO_BLANCAS;
             }
         }
 
@@ -277,7 +281,6 @@ void jugar() {
 
 
 int main() {
-
     int opcion;
 
     cout << "============================================" << endl;
@@ -286,45 +289,47 @@ int main() {
     cout << "    CS1112 Programacion II - 2026-I" << endl;
     cout << "============================================" << endl;
 
+    // CAMBIO: menu impreso una vez antes del loop
+    cout << "====== MENU PRINCIPAL ======" << endl;
+    cout << "  0. Instrucciones" << endl;
+    cout << "  1. Integrantes" << endl;
+    cout << "  2. Consideraciones" << endl;
+    cout << "  3. Jugar" << endl;
+    cout << "  4. Salir" << endl;
+    cout << "============================" << endl;
+
     do {
-
-        cout << "====== MENU PRINCIPAL ======" << endl;
-        cout << "  0. Instrucciones" << endl;
-        cout << "  1. Integrantes" << endl;
-        cout << "  2. Consideraciones" << endl;
-        cout << "  3. Jugar" << endl;
-        cout << "  4. Salir" << endl;
-        cout << "============================" << endl;
-
         cout << "Seleccione una opcion: ";
-        if (!(cin >> opcion)) {   // si falla (
-            cin.clear();          // limpia el error
-            cin.ignore(1000, '\n'); // limpia el buffer
-            opcion = -1;          // fuerza repetir el loop
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
         }
-        switch(opcion) {
 
+        switch(opcion) {
             case 0:
                 mostrarInstrucciones();
                 break;
-
             case 1:
                 mostrarIntegrantes();
                 break;
-
             case 2:
                 mostrarConsideraciones();
                 break;
-
             case 3:
                 jugar();
                 break;
-
             case 4:
                 cout << "¡Hasta la proxima! Gracias por jugar El Gambito de UTEC." << endl;
                 break;
-
             default:
+                cout << "====== MENU PRINCIPAL ======" << endl;
+                cout << "  0. Instrucciones" << endl;
+                cout << "  1. Integrantes" << endl;
+                cout << "  2. Consideraciones" << endl;
+                cout << "  3. Jugar" << endl;
+                cout << "  4. Salir" << endl;
+                cout << "============================" << endl;
                 cout << "Opcion no valida. Intente de nuevo." << endl;
                 break;
         }
