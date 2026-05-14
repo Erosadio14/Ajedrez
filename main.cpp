@@ -3,6 +3,8 @@ using namespace std;
 #include "tablero.h"
 #include "constantes.h"
 #include "piezas_avanzadas.h"
+#include "utilidades.h"
+#include "piezas_basicas.h"
 
 
 // Flags para validar el enroque:
@@ -14,51 +16,214 @@ bool torreNegroA_Mov   = false;
 bool torreNegroH_Mov   = false;
 // fin de los flags
 
-void mostrarInstrucciones() {
+// Reiniciar flags al iniciar partida
+void reiniciarFlags() {
+    reyBlancoMovido   = false;
+    reyNegroMovido    = false;
+    torreBlancoA_Mov  = false;
+    torreBlancoH_Mov  = false;
+    torreNegroA_Mov   = false;
+    torreNegroH_Mov   = false;
+}
 
+bool parsearCasilla(const string& entrada, int& fila, int& col) {
+    if (entrada.size() < 2) return false;
+    char buf[4];
+    buf[0] = toupper((unsigned char)entrada[0]);
+    buf[1] = entrada[1];
+    buf[2] = '\0';
+    if (buf[0] < 'A' || buf[0] > 'H') return false;
+    if (buf[1] < '1' || buf[1] > '8') return false;
+    lexCasilla(buf, &fila, &col);
+    return true;
+}
+
+// ── Actualizar flag si una torre fue movida
+void actualizarFlagTorre(int fo, int co) {
+    if (fo == 0 && co == 0) torreBlancoA_Mov = true;
+    if (fo == 0 && co == 7) torreBlancoH_Mov = true;
+    if (fo == 7 && co == 0) torreNegroA_Mov  = true;
+    if (fo == 7 && co == 7) torreNegroH_Mov  = true;
+}
+
+// ── Detectar y ejecutar enroque
+bool manejarEnroque(char tab[8][8], int fo, int co, int fd, int cd, int turno) {
+    char pieza = tab[fo][co];
+    if (turno == TURNO_BLANCAS && pieza == REY_B && fo == 0 && co == 4) {
+        if (fd == 0 && cd == 6) return intentarEnroque(tab, 'B', true);
+        if (fd == 0 && cd == 2) return intentarEnroque(tab, 'B', false);
+    }
+    if (turno == TURNO_NEGRAS && pieza == REY_N && fo == 7 && co == 4) {
+        if (fd == 7 && cd == 6) return intentarEnroque(tab, 'N', true);
+        if (fd == 7 && cd == 2) return intentarEnroque(tab, 'N', false);
+    }
+    return false;
+}
+
+//MENU
+void mostrarInstrucciones() {
     int opcion;
 
+    cout << "======= INSTRUCCIONES =======" << endl;
+    cout << "- Las blancas se mueven primero." << endl;
+    cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+    cout << "- Columnas: A-H | Filas: 1-8" << endl;
+    cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
+    cout << endl;
+    cout << "1. Volver al menu" << endl;
+    cout << "2. Salir del juego" << endl;
+
     do {
-
-        cout << "======= INSTRUCCIONES =======" << endl;
-        cout << "- Las blancas se mueven primero." << endl;
-        cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
-
-        cout << endl;
-        cout << "1. Volver al menu" << endl;
-        cout << "2. Salir del juego" << endl;
-
         cout << "Seleccione una opcion: ";
-        cin >> opcion;
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
+        }
 
         switch(opcion) {
-
             case 1:
                 break;
-
             case 2:
                 cout << "Gracias por jugar." << endl;
                 exit(0);
             default:
-                cout << "Opcion no valida. Intente de nuevo." << endl;
+                cout << "======= INSTRUCCIONES =======" << endl;
+                cout << "- Las blancas se mueven primero." << endl;
+                cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+                cout << "- Columnas: A-H | Filas: 1-8" << endl;
+                cout << "- El juego termina cuando un rey es capturado o un jugador se rinde." << endl;
                 cout << endl;
-
+                cout << "1. Volver al menu" << endl;
+                cout << "2. Salir del juego" << endl;
+                cout << "Opcion no valida. Intente de nuevo." << endl;
         }
 
     } while(opcion != 1);
 }
+
+//
 void mostrarIntegrantes() {
 
     cout << "======== INTEGRANTES ======" << endl;
-    cout << "Integrante 1-blancas : " << endl;
-    cout << "Integrante 2-blancas : " << endl;
-    cout << "Integrante 1-negras : " << endl;
-    cout << "Integrante 2-negras : " << endl;
+    cout << "Integrante 1: Kihara Mamani" << endl;
+    cout << "Integrante 2: Adrian Rosadio " << endl;
+    cout << "Integrante 3: Adrian Cespedes" << endl;
+    cout << "Integrante 4: Asael Herrera" << endl;
+    cout << endl;
 
 }
 void mostrarConsideraciones() {
     cout << "======== CONSIDERACIONES ======" << endl;
+    cout << "- Peon al paso: NO implementado." << endl;
+    cout << "- Jaque / Jaque mate: NO implementado." << endl;
+    cout << "- Enroque sin verificacion de jaque." << endl;
+    cout << "- El juego termina por captura del rey o rendicion." << endl;
+    cout << endl;
 }
+
+//LOGICA DE MOVIMIENTO
+
+bool moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& jugador1, const string& jugador2) {
+
+    string entradaOrigen, entradaDestino;
+    int fo, co, fd, cd;
+
+    cout << "Casilla de ORIGEN  (ej. E2): ";
+    cin >> entradaOrigen;
+
+    if (!parsearCasilla(entradaOrigen, fo, co)) {
+        cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E2) *****\n" << endl;
+        return false;
+    }
+
+    if (!validarRango(fo, co)) {
+        cout << "\n***** Movimiento NO VALIDO : casilla fuera de rango *****\n" << endl;
+        return false;
+    }
+
+    char piezaOrigen = tablero[fo][co];
+
+    if (piezaOrigen == VACIA) {
+        cout << "\n***** Movimiento NO VALIDO : no hay pieza en la casilla de origen *****\n" << endl;
+        return false;
+    }
+
+    if (turno == TURNO_BLANCAS && piezaOrigen >= 'a' && piezaOrigen <= 'z') {
+        cout << "\n***** Movimiento NO VALIDO : solo puedes mover piezas BLANCAS *****\n" << endl;
+        return false;
+    }
+
+    if (turno == TURNO_NEGRAS && piezaOrigen >= 'A' && piezaOrigen <= 'Z') {
+        cout << "\n***** Movimiento NO VALIDO : solo puedes mover piezas NEGRAS *****\n" << endl;
+        return false;
+    }
+
+    cout << "Casilla de DESTINO (ej. E4): ";
+    cin >> entradaDestino;
+
+    if (!parsearCasilla(entradaDestino, fd, cd)) {
+        cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E4) *****\n" << endl;
+        return false;
+    }
+
+    if (!validarRango(fd, cd)) {
+        cout << "\n***** Movimiento NO VALIDO : casilla fuera de rango *****\n" << endl;
+        return false;
+    }
+
+    if (fo == fd && co == cd) {
+        cout << "\n***** Movimiento NO VALIDO : debes mover a una casilla diferente *****\n" << endl;
+        return false;
+    }
+
+    // Verificar enroque
+    if (manejarEnroque(tablero, fo, co, fd, cd, turno)) {
+        cout << "\nEnroque realizado." << endl;
+        return true;
+    }
+
+    // Validar movimiento segun la pieza
+    if (!esMovimientoValido(tablero, fo, co, fd, cd, turno)) {
+        cout << "\n***** Movimiento NO VALIDO : movimiento no permitido para esta pieza *****\n" << endl;
+        return false;
+    }
+
+    // Guardar pieza capturada
+    char piezaCapturada = tablero[fd][cd];
+
+    // Actualizar flag si se mueve una torre
+    actualizarFlagTorre(fo, co);
+    if (piezaOrigen == REY_B) reyBlancoMovido = true;
+    if (piezaOrigen == REY_N) reyNegroMovido  = true;
+
+    // Aplicar movimiento
+    moverPieza(tablero, fo, co, fd, cd);
+    cout << "\nMovimiento VALIDO." << endl;
+
+    // Verificar coronacion del peon
+    char piezaMovida = tablero[fd][cd];
+    if (piezaMovida == PEON_B && fd == 7) coronarPeon(tablero, fd, cd);
+    if (piezaMovida == PEON_N && fd == 0) coronarPeon(tablero, fd, cd);
+
+    // Verificar fin de juego por captura de rey
+    if (piezaCapturada == REY_B) {
+        imprimirTablero(tablero);
+        cout << "--- REY BLANCO ELIMINADO ---" << endl;
+        cout << "----- GANADOR: " << jugador2 << " (PIEZAS NEGRAS) -----" << endl;
+        cout << "----- FIN DEL JUEGO -----\n" << endl;
+        juegoActivo = false;
+    } else if (piezaCapturada == REY_N) {
+        imprimirTablero(tablero);
+        cout << "--- REY NEGRO ELIMINADO ---" << endl;
+        cout << "----- GANADOR: " << jugador1 << " (PIEZAS BLANCAS) -----" << endl;
+        cout << "----- FIN DEL JUEGO -----\n" << endl;
+        juegoActivo = false;
+    }
+
+    return true;  // CAMBIO
+}
+
 void jugar() {
     char tablero[8][8];
     string jugador1;
@@ -67,12 +232,14 @@ void jugar() {
     int turno = TURNO_BLANCAS;
     bool juegoActivo = true;
 
+    reiniciarFlags();
     inicializarTablero(tablero);
 
     cout << "Jugador 1 (Blancas) : " << endl;
     cin >> jugador1;
     cout << "Jugador 2 (Negras) : " << endl;
     cin >> jugador2;
+    cout << "Comienza el juego! " << endl;
 
     while (juegoActivo) {
         imprimirTablero(tablero);
@@ -82,13 +249,17 @@ void jugar() {
 
         cout << "Turno de " << nombreTurno << " - " << colorTurno << endl;
         cout <<"1. Mover pieza" << endl;
-        cout <<"2. Rendirse" << endl;
+        cout <<"0. Rendirse" << endl;
         do {
-            cout << "Seleccione una opcion: ";
-            cin >> opcion;
-        }while (opcion < 1 || opcion > 2);
+            cout << "Seleccione una opcion: " << endl;
+            if (!(cin >> opcion)) {  // si falla (ej: escribiste "E4")
+                cin.clear();          // limpia el error
+                cin.ignore(1000, '\n'); // limpia el buffer
+                opcion = -1;          // fuerza repetir el loop
+            }
+        } while (opcion < 0 || opcion > 1);
 
-        if (opcion == 2) {
+        if (opcion == 0) {
             string ganador= (turno == TURNO_BLANCAS) ? jugador2 : jugador1;
             string colorGanador = (turno == TURNO_BLANCAS) ? "NEGRAS" : "BLANCAS";
             cout << nombreTurno << " se rindio." << endl;
@@ -96,6 +267,11 @@ void jugar() {
             cout << "------ FIN DEL JUEGO ------" << endl;
             cout << endl;
             juegoActivo = false;
+        } else {
+            bool movimientoExitoso = moverTurno(tablero, turno, juegoActivo, jugador1, jugador2);
+            if (juegoActivo && movimientoExitoso) {
+                turno = (turno == TURNO_BLANCAS) ? TURNO_NEGRAS : TURNO_BLANCAS;
+            }
         }
 
     }
@@ -105,7 +281,6 @@ void jugar() {
 
 
 int main() {
-
     int opcion;
 
     cout << "============================================" << endl;
@@ -114,42 +289,47 @@ int main() {
     cout << "    CS1112 Programacion II - 2026-I" << endl;
     cout << "============================================" << endl;
 
+    // CAMBIO: menu impreso una vez antes del loop
+    cout << "====== MENU PRINCIPAL ======" << endl;
+    cout << "  0. Instrucciones" << endl;
+    cout << "  1. Integrantes" << endl;
+    cout << "  2. Consideraciones" << endl;
+    cout << "  3. Jugar" << endl;
+    cout << "  4. Salir" << endl;
+    cout << "============================" << endl;
+
     do {
-
-        cout << "====== MENU PRINCIPAL ======" << endl;
-        cout << "  0. Instrucciones" << endl;
-        cout << "  1. Integrantes" << endl;
-        cout << "  2. Consideraciones" << endl;
-        cout << "  3. Jugar" << endl;
-        cout << "  4. Salir" << endl;
-        cout << "============================" << endl;
-
         cout << "Seleccione una opcion: ";
-        cin >> opcion;
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
+        }
 
         switch(opcion) {
-
             case 0:
                 mostrarInstrucciones();
                 break;
-
             case 1:
                 mostrarIntegrantes();
                 break;
-
             case 2:
                 mostrarConsideraciones();
                 break;
-
             case 3:
                 jugar();
                 break;
-
             case 4:
                 cout << "¡Hasta la proxima! Gracias por jugar El Gambito de UTEC." << endl;
                 break;
-
             default:
+                cout << "====== MENU PRINCIPAL ======" << endl;
+                cout << "  0. Instrucciones" << endl;
+                cout << "  1. Integrantes" << endl;
+                cout << "  2. Consideraciones" << endl;
+                cout << "  3. Jugar" << endl;
+                cout << "  4. Salir" << endl;
+                cout << "============================" << endl;
                 cout << "Opcion no valida. Intente de nuevo." << endl;
                 break;
         }

@@ -11,12 +11,12 @@ extern bool torreNegroA_Mov;
 extern bool torreNegroH_Mov;
 
 // Movimientos de piezas
-bool validarRey (char tab[8][8], int fo, int co, int fd, int cd);
-bool validarCaballo (char tab[8][8], int fo, int co, int fd, int cd);
-bool validarDama (char tab[8][8], int fo, int co, int fd, int cd);
+bool validarRey(char tab[8][8], int fo, int co, int fd, int cd);
+bool validarCaballo(char tab[8][8], int fo, int co, int fd, int cd);
+bool validarDama(char tab[8][8], int fo, int co, int fd, int cd);
 
 // Intentar enroque
-bool intentarEnroquer (char tab[8][8], char color, bool corto);
+bool intentarEnroque(char tab[8][8], char color, bool corto);
 
 // Coordinador general
 bool esMovimientoValido(char tab[8][8], int fo, int co, int fd, int cd, int turno);
