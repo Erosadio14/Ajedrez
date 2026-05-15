@@ -27,13 +27,24 @@ void reiniciarFlags() {
 }
 
 bool parsearCasilla(const string& entrada, int& fila, int& col) {
-    if (entrada.size() < 2) return false;
+    if (entrada.size() != 2) {
+        cout << "\n*** Movimiento NO VALIDO : casilla invalida, ingrese columna y fila (ej. E2) ***\n" << endl;
+        return false;
+    }
     char buf[4];
     buf[0] = toupper((unsigned char)entrada[0]);
     buf[1] = entrada[1];
     buf[2] = '\0';
-    if (buf[0] < 'A' || buf[0] > 'H') return false;
-    if (buf[1] < '1' || buf[1] > '8') return false;
+
+    if (buf[0] < 'A' || buf[0] > 'H') {
+        cout << "\n*** NO VALIDO :casilla invalida, la letra debe ser entre A y H ***\n" << endl;
+        return false;
+    }
+    if (buf[1] < '1' || buf[1] > '8') {
+        cout << "\n*** NO VALIDO :casilla invalida, el numero debe ser entre 1 y 8 ***\n" << endl;
+        return false;
+    }
+
     lexCasilla(buf, &fila, &col);
     return true;
 }
@@ -133,7 +144,6 @@ bool moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& 
     cin >> entradaOrigen;
 
     if (!parsearCasilla(entradaOrigen, fo, co)) {
-        cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E2) *****\n" << endl;
         return false;
     }
 
@@ -163,7 +173,6 @@ bool moverTurno(char tablero[8][8], int turno, bool& juegoActivo, const string& 
     cin >> entradaDestino;
 
     if (!parsearCasilla(entradaDestino, fd, cd)) {
-        cout << "\n***** Movimiento NO VALIDO : formato invalido (use ej. E4) *****\n" << endl;
         return false;
     }
 
