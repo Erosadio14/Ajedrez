@@ -37,7 +37,7 @@ bool parsearCasilla(const string& entrada, int& fila, int& col) {
     buf[2] = '\0';
 
     if (buf[0] < 'A' || buf[0] > 'H') {
-        cout << "\n*** NO VALIDO :casilla invalida, la letra debe ser entre A y H ***\n" << endl;
+        cout << "\n*** NO VALIDO :casilla invalida,la letra debe ser entre A y H ***\n" << endl;
         return false;
     }
     if (buf[1] < '1' || buf[1] > '8') {
