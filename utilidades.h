@@ -1,11 +1,25 @@
-#ifndef AJEDREZ_UTILIDADES_H
-#define AJEDREZ_UTILIDADES_H
+#ifndef UTILIDADES_H
+#define UTILIDADES_H
 
+#include <string>
+using namespace std;
+
+// Parseo de casillas
 void lexCasilla(const char* casilla, int* fila, int* col);
-void moverPieza(char tablero[8][8], int f1, int c1, int f2, int c2);
+bool parsearCasilla(const string& entrada, int& fila, int& col);
+
+// Validacion de rango
+bool validarRango(int fila, int col);
+
+// Color de casilla (para imprimir tablero)
 bool esCasillaBlanca(int fila, int col);
 bool esCasillaNegra(int fila, int col);
-bool validarRango(int fila, int col);
-void mensajeError(const char* texto);
 
-#endif //AJEDREZ_UTILIDADES_H
+// Mensajes
+void mensajeError(const char* texto);
+void mensajeInvalido(const char* motivo);
+
+// Conversion de coordenadas a string (ej: fila=0, col=4 -> "E1")
+string coordAString(int fila, int col);
+
+#endif
