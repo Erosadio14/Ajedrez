@@ -14,4 +14,6 @@ add_executable(Ajedrez
         piezas_avanzadas.cpp
         piezas_basicas.cpp
         piezas_basicas.h
+        Pieza.h
+        Pieza.cpp
 )
