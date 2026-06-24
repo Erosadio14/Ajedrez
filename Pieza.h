@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-// Declaracion adelantada para evitar inclusion circular
+//Declaracion adelantada para evitar inclusion circular
 class Tablero;
 
 class Pieza {
