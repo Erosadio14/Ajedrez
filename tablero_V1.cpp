@@ -1,5 +1,5 @@
 #include <iostream>
-#include "tablero.h"
+#include "tablero_V1.h"
 #include "constantes.h"
 
 using namespace std;

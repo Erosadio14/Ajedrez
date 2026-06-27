@@ -8,12 +8,14 @@ add_executable(Ajedrez
         constantes.h
         utilidades.h
         utilidades.cpp
-        tablero.cpp
-        tablero.h
+        #tablero_V1.cpp
+        #tablero_V1.h
         piezas_avanzadas.h
         piezas_avanzadas.cpp
         piezas_basicas.cpp
         piezas_basicas.h
         Pieza.h
         Pieza.cpp
+        Tablero.cpp
+        Tablero.h
 )

@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#include "tablero.h"
+#include "tablero_V1.h"
 #include "constantes.h"
 #include "piezas_avanzadas.h"
 #include "utilidades.h"
