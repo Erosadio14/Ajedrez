@@ -1,7 +1,6 @@
 #include "Tablero.h"
 
 Tablero::Tablero() {
-    // Ponemos todo en nullptr (vacío de forma segura)
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             casillas[i][j] = nullptr;
@@ -14,7 +13,6 @@ Tablero::~Tablero() {
 }
 
 void Tablero::limpiar() {
-    // Libera la memoria de cualquier pieza que se haya colocado aquí
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             if (casillas[i][j] != nullptr) {
@@ -28,7 +26,6 @@ void Tablero::limpiar() {
 void Tablero::inicializar() {
     limpiar(); 
     // NOTA: Se deja vacía temporalmente para definir el escenario.
-    // Cuando tus compañeros tengan Peon.h, Torre.h, etc., aquí pondrás los "new"
 }
 
 Pieza* Tablero::getPieza(int fila, int col) const {
@@ -67,7 +64,6 @@ bool Tablero::mover(int filO, int colO, int filD, int colD) {
 bool Tablero::estaEnJaque(char color) {
     int filRey = -1, colRey = -1;
 
-    // 1. Localizar al Rey del color consultado
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Pieza* p = casillas[i][j];
@@ -82,7 +78,6 @@ bool Tablero::estaEnJaque(char color) {
 
     if (filRey == -1) return false;
 
-    // 2. Preguntar a las piezas enemigas si alcanzan válidamente la casilla del Rey
     char colorEnemigo = (color == 'B') ? 'N' : 'B';
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -97,13 +92,11 @@ bool Tablero::estaEnJaque(char color) {
     return false;
 }
 
-// ¡CAMBIO CLAVE AQUÍ! Ya no llama a clonar de Pieza, así que compilará sin errores
 Tablero* Tablero::clonar() const {
     Tablero* copia = new Tablero();
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             // Temporalmente solo inicializamos la copia como un tablero limpio.
-            // Más adelante (Día 4) cuando estén integradas las piezas reales, 
             // se cambiará por: copia->casillas[i][j] = this->casillas[i][j]->clonar();
             copia->casillas[i][j] = nullptr; 
         }

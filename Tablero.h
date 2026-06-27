@@ -2,18 +2,16 @@
 #define TABLERO_H
 
 #include <iostream>
-#include "Pieza.h" // Depende únicamente de la abstracción base
+#include "Pieza.h"
 
 class Tablero {
 private:
     Pieza* casillas[8][8]; // Matriz polimórfica de punteros
 
 public:
-    // Constructor y Destructor
     Tablero();
     ~Tablero();
 
-    // Ciclo de vida y utilitarios
     void inicializar();
     void limpiar();
     bool mover(int filO, int colO, int filD, int colD);
