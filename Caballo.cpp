@@ -9,8 +9,12 @@ Caballo::Caballo(char color, int fila, int col)
 Caballo::~Caballo() {
 }
 
+Pieza* Caballo::clonar() const {
+    return new Caballo(color, fila, col);
+}
+
 // Movimiento válido: en L (2+1 o 1+2)
-bool Caballo::movimientoValido(Tablero& tab, int fd, int cd) const {
+bool Caballo::movimientoValido(const Tablero& tab, int fd, int cd) const {
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 

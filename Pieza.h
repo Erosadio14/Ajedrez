@@ -21,7 +21,8 @@ public:
     virtual ~Pieza();
 
     // ── Metodo puro virtual: cada subclase define su movimiento
-    virtual bool movimientoValido(Tablero& tab, int fd, int cd) const = 0;
+    virtual bool movimientoValido(const Tablero& tab, int fd, int cd) const = 0;
+    virtual Pieza* clonar() const = 0;
 
     // ── Getters
     char getColor()   const;

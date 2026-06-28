@@ -8,8 +8,12 @@ Torre::Torre(char color, int fila, int col)
 Torre::~Torre() {
 }
 
+Pieza* Torre::clonar() const {
+    return new Torre(color, fila, col);
+}
+
 // Movimiento válido: recto (horizontal o vertical) y camino libre
-bool Torre::movimientoValido(Tablero& tab, int fd, int cd) const {
+bool Torre::movimientoValido(const Tablero& tab, int fd, int cd) const {
     // Debe moverse en la misma fila o columna
     if (fila != fd && col != cd) return false;
 

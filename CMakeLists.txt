@@ -26,4 +26,6 @@ add_executable(Ajedrez
         Dama.h
         Caballo.cpp
         Caballo.h
+        Rey.cpp
+        Rey.h
 )
