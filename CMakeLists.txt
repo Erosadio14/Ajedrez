@@ -18,4 +18,12 @@ add_executable(Ajedrez
         Pieza.cpp
         Tablero.cpp
         Tablero.h
+        Torre.cpp
+        Torre.h
+        Alfil.cpp
+        Alfil.h
+        Dama.cpp
+        Dama.h
+        Caballo.cpp
+        Caballo.h
 )
