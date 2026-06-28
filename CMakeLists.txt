@@ -28,4 +28,6 @@ add_executable(Ajedrez
         Caballo.h
         Rey.cpp
         Rey.h
+        Peon.cpp
+        Peon.h
 )
