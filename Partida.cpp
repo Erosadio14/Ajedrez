@@ -77,7 +77,7 @@ void Partida::inicializarPiezas() {
 }
 
 // ── Verificar si movimiento deja al rey propio en jaque ──────────────────────
-bool Partida::dejaPropioReyEnJaque(int fo, int co, int fd, int cd) {
+bool Partida::dejaPropioReyEnJaque(int fo, int co, int fd, int cd) const{
     Tablero* copia = tablero.clonar();
     copia->mover(fo, co, fd, cd);
     bool enJaque = copia->estaEnJaque(colorActual());
