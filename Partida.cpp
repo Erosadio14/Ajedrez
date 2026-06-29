@@ -223,12 +223,15 @@ bool Partida::manejarEnroque(int fo, int co, int fd, int cd) {
     }
 
     int colPaso = corto ? 5 : 3;
-    tablero.mover(fo, co, fila, colPaso);
-    if (tablero.estaEnJaque(color)) {
-        tablero.mover(fila, colPaso, fo, co);
-        cout << "\n***** El rey pasaria por una casilla atacada *****\n"; return false;
+    // CORRECTO — simular en copia sin tocar el tablero real
+    Tablero* copia = tablero.clonar();
+    copia->mover(fo, co, fila, colPaso);
+    if (copia->estaEnJaque(color)) {
+        delete copia;
+        cout << "\n***** El rey pasaria por una casilla atacada *****\n";
+        return false;
     }
-    tablero.mover(fila, colPaso, fo, co);
+    delete copia;
 
     // Ejecutar enroque
     int colTorreOrigen  = corto ? 7 : 0;
@@ -410,9 +413,25 @@ void Partida::procesarTurno() {
             cout << "2.- Torre" << endl;
             cout << "3.- Alfil" << endl;
             cout << "4.- Caballo" << endl;
-            cout << "Su eleccion: ";
-            int eleccion;
-            cin >> eleccion;
+            // CORRECTO — con validacion
+            int eleccion = -1;
+            do {
+                cout << "Su eleccion: ";
+                if (!(cin >> eleccion)) {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    eleccion = -1;
+                }
+                if (eleccion < 0 || eleccion > 4) {
+                    cout << "~~~~~ CORONAR PEON ~~~~~" << endl;
+                    cout << "0.- Ninguna (Peon)" << endl;
+                    cout << "1.- Reina" << endl;
+                    cout << "2.- Torre" << endl;
+                    cout << "3.- Alfil" << endl;
+                    cout << "4.- Caballo" << endl;
+                    cout << "Opcion no valida. Intente de nuevo." << endl;
+                }
+            } while (eleccion < 0 || eleccion > 4);
             Pieza* nueva = nullptr;
             switch(eleccion) {
                 case 1: nueva = new Dama   (color, fd, cd); break;
