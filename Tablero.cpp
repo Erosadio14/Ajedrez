@@ -96,10 +96,11 @@ Tablero* Tablero::clonar() const {
     Tablero* copia = new Tablero();
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            if (casillas[i][j] != nullptr)
+            if (casillas[i][j] != nullptr) {
                 copia->casillas[i][j] = casillas[i][j]->clonar();
-            else
+            } else {
                 copia->casillas[i][j] = nullptr;
+            }
         }
     }
     return copia;

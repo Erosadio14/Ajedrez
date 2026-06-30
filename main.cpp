@@ -1,63 +1,137 @@
 #include <iostream>
-#include <string>
 #include "Partida.h"
-#include "constantes.h" // Incluido para que el main conozca las reglas globales
-
 using namespace std;
 
+// ── Funciones del menu ───────────────────────────────────────────────────────
+
+void mostrarInstrucciones() {
+    cout << "======= INSTRUCCIONES =======" << endl;
+    cout << "- Las blancas se mueven primero." << endl;
+    cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+    cout << "- Columnas: A-H | Filas: 1-8" << endl;
+    cout << "- El juego termina por jaque mate, ahogado, tablas o rendicion." << endl;
+    cout << endl;
+    cout << "1. Volver al menu" << endl;
+    cout << "2. Salir del juego" << endl;
+
+    int opcion = -1;
+    do {
+        cout << "Seleccione una opcion: ";
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
+        }
+        switch(opcion) {
+            case 1: break;
+            case 2:
+                cout << "Gracias por jugar." << endl;
+                exit(0);
+            default:
+                cout << "======= INSTRUCCIONES =======" << endl;
+                cout << "- Las blancas se mueven primero." << endl;
+                cout << "- Ingrese casillas en formato ColFila, ej: E2" << endl;
+                cout << "- Columnas: A-H | Filas: 1-8" << endl;
+                cout << "- El juego termina por jaque mate, ahogado, tablas o rendicion." << endl;
+                cout << endl;
+                cout << "1. Volver al menu" << endl;
+                cout << "2. Salir del juego" << endl;
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+    } while (opcion != 1);
+}
+
+void mostrarIntegrantes() {
+    cout << "======== INTEGRANTES ======" << endl;
+    cout << "Integrante 1: Kihara Mamani" << endl;
+    cout << "Integrante 2: Adrian Rosadio" << endl;
+    cout << "Integrante 3: Adrian Cespedes" << endl;
+    cout << "Integrante 4: Asael Herrera" << endl;
+    cout << endl;
+}
+
+void mostrarConsideraciones() {
+    cout << "======== CONSIDERACIONES ======" << endl;
+    cout << "- Enroque con verificacion de jaque implementado." << endl;
+    cout << "- Peon al paso implementado." << endl;
+    cout << "- Jaque mate como condicion de fin de juego." << endl;
+    cout << "- Ahogado (stalemate) implementado." << endl;
+    cout << "- Tablas por repeticion de posicion (3 veces)." << endl;
+    cout << "- Regla de los 50 movimientos implementada." << endl;
+    cout << "- Historial de movimientos visible en pantalla." << endl;
+    cout << "- Guardar y cargar partida en archivo .txt." << endl;
+    cout << endl;
+}
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+
 int main() {
-    cout << "=================================================" << endl;
-    cout << "          BIENVENIDO AL JUEGO DE AJEDREZ         " << endl;
-    cout << "=================================================" << endl;
+    cout << "============================================" << endl;
+    cout << "         EL GAMBITO DE UTEC" << endl;
+    cout << "       Ajedrez en C++ - Terminal" << endl;
+    cout << "    CS1112 Programacion II - 2026-I" << endl;
+    cout << "============================================" << endl;
 
-    // 1. Instanciar la clase controladora que programaron
-    Partida juego;
+    Partida partida;
 
-    // 2. Configurar la partida (pedir nombres de jugadores, inicializar las piezas, etc.)
-    juego.configurarPartida();
+    cout << "====== MENU PRINCIPAL ======" << endl;
+    cout << "  0. Instrucciones" << endl;
+    cout << "  1. Integrantes" << endl;
+    cout << "  2. Consideraciones" << endl;
+    cout << "  3. Jugar" << endl;
+    cout << "  4. Cargar partida" << endl;
+    cout << "  5. Salir" << endl;
+    cout << "============================" << endl;
 
-    cout << "\n¡La partida ha comenzado! Buena suerte.\n" << endl;
-
-    // 3. Bucle principal de juego usando las funciones reales de tu Partida.h
-    while (!juego.esJaqueMate() && !juego.esAhogado() && !juego.verificar50Movimientos()) {
-
-        // Mostrar el estado gráfico del tablero actual e historial en consola
-        juego.mostrarEstado();
-
-        // Avisar el turno correspondiente usando colorActual() de tu clase
-        if (juego.colorActual() == 'B') {
-            cout << "\n>>> TURNO DE LAS PIEZAS BLANCAS <<<" << endl;
+    int opcion = -1;
+    do {
+        cout << "Seleccione una opcion: ";
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
         } else {
-            cout << "\n>>> TURNO DE LAS PIEZAS NEGRAS <<<" << endl;
+            cin.ignore(1000, '\n');
         }
 
-        // procesarTurno() se encarga de: pedir las coordenadas al usuario, validar
-        // los movimientos de tus piezas con polimorfismo, procesar capturas y cambiar el turno.
-        juego.procesarTurno();
-    }
-
-    // --- PANTALLA DE FIN DE JUEGO ---
-    cout << "\n=================================================" << endl;
-    cout << "                FIN DE LA PARTIDA                " << endl;
-    cout << "=================================================" << endl;
-
-    // Imprimir el tablero en su posición final
-    juego.mostrarEstado();
-
-    // Evaluar cuál fue la condición de salida del bucle usando tus métodos
-    if (juego.esJaqueMate()) {
-        // Si hay jaque mate y el color actual es 'B', significa que las blancas acaban
-        // de iniciar su turno en jaque sin salida, por ende ganaron las negras (y viceversa).
-        if (juego.colorActual() == 'B') {
-            cout << "\n¡JAQUE MATE! Las piezas NEGRAS han ganado el juego." << endl;
-        } else {
-            cout << "\n¡JAQUE MATE! Las piezas BLANCAS han ganado el juego." << endl;
+        switch(opcion) {
+            case 0:
+                mostrarInstrucciones();
+                break;
+            case 1:
+                mostrarIntegrantes();
+                break;
+            case 2:
+                mostrarConsideraciones();
+                break;
+            case 3:
+                partida.jugar();
+                break;
+            case 4:
+                if (partida.cargarPartida()) {
+                    partida.jugar();
+                }
+                break;
+            case 5:
+                cout << "¡Hasta la proxima! Gracias por jugar El Gambito de UTEC." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+                break;
         }
-    } else if (juego.esAhogado()) {
-        cout << "\n¡TABLAS POR REY AHOGADO! El juego termina en empate." << endl;
-    } else if (juego.verificar50Movimientos()) {
-        cout << "\n¡TABLAS POR LA REGLA DE LOS 50 MOVIMIENTOS! El juego termina en empate." << endl;
-    }
+
+        if (opcion != 5) {
+            cout << "====== MENU PRINCIPAL ======" << endl;
+            cout << "  0. Instrucciones" << endl;
+            cout << "  1. Integrantes" << endl;
+            cout << "  2. Consideraciones" << endl;
+            cout << "  3. Jugar" << endl;
+            cout << "  4. Cargar partida" << endl;
+            cout << "  5. Salir" << endl;
+            cout << "============================" << endl;
+        }
+
+    } while (opcion != 5);
 
     return 0;
 }

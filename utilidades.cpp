@@ -19,25 +19,17 @@ void lexCasilla(const char* casilla, int* fila, int* col) {
 }
 
 bool parsearCasilla(const string& entrada, int& fila, int& col) {
-    if (entrada.size() != 2) {
-        mensajeInvalido("casilla invalida, ingrese columna y fila (ej. E2)");
-        return false;
-    }
-    char buf[4];
-    buf[0] = toupper((unsigned char)entrada[0]);
-    buf[1] = entrada[1];
-    buf[2] = '\0';
+    if (entrada.size() < 2) return false;
 
-    if (buf[0] < 'A' || buf[0] > 'H') {
-        mensajeInvalido("casilla invalida, la letra debe ser entre A y H");
-        return false;
-    }
-    if (buf[1] < '1' || buf[1] > '8') {
-        mensajeInvalido("casilla invalida, el numero debe ser entre 1 y 8");
-        return false;
-    }
+    char columna = toupper((unsigned char)entrada[0]);
+    char filaCar = entrada[1];
 
-    lexCasilla(buf, &fila, &col);
+    if (columna < 'A' || columna > 'H') return false;
+    if (filaCar  < '1' || filaCar  > '8') return false;
+
+    col  = columna - 'A';   // 'A'→0, 'H'→7
+    fila = filaCar  - '1';  // '1'→0, '8'→7
+
     return true;
 }
 
@@ -55,8 +47,8 @@ void mensajeInvalido(const char* motivo) {
 }
 
 string coordAString(int fila, int col) {
-    string s = "  ";
-    s[0] = (char)('A' + col);
-    s[1] = (char)('1' + fila);
-    return s;
+    string resultado = "";
+    resultado += (char)('A' + col);   // col 0→'A', col 4→'E'
+    resultado += (char)('1' + fila);  // fila 0→'1', fila 6→'7'
+    return resultado;
 }

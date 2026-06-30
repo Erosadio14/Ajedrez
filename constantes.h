@@ -1,5 +1,7 @@
 #ifndef CONSTANTES_H
 #define CONSTANTES_H
+#include <string>
+using namespace std;
 
 // ── Colores
 const int BLANCAS = 0;
