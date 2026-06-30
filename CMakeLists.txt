@@ -30,4 +30,6 @@ add_executable(Ajedrez
         Rey.h
         Peon.cpp
         Peon.h
+        Partida.cpp
+        Partida.h
 )
