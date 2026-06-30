@@ -52,7 +52,7 @@ private:
     char colorActual() const;
 
     // Verificar si un movimiento deja al rey propio en jaque
-    bool dejaPropioReyEnJaque(int fo, int co, int fd, int cd);
+    bool dejaPropioReyEnJaque(int fo, int co, int fd, int cd) const;
 
     // Intentar enroque
     bool manejarEnroque(int fo, int co, int fd, int cd);
