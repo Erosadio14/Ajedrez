@@ -524,6 +524,8 @@ void Partida::jugar() {
 // ── Guardar partida
 void Partida::guardarPartida() const {
     ofstream archivo(ARCHIVO_PARTIDA);
+
+
     if (!archivo.is_open()) {
         cout << "Error: no se pudo guardar la partida." << endl;
         return;
@@ -561,6 +563,9 @@ void Partida::guardarPartida() const {
 // ── Cargar partida ────────────────────────────────────────────────────────────
 bool Partida::cargarPartida() {
     ifstream archivo(ARCHIVO_PARTIDA);
+
+
+    archivo.open(ARCHIVO_PARTIDA);
     if (!archivo.is_open()) {
         cout << "Error: no se encontro el archivo " << ARCHIVO_PARTIDA << endl;
         return false;
