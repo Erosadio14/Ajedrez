@@ -104,6 +104,7 @@ int main() {
                 mostrarConsideraciones();
                 break;
             case 3:
+                partida.iniciar();
                 partida.jugar();
                 break;
             case 4:

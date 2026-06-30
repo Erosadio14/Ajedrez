@@ -121,7 +121,11 @@ string Partida::estadoTablero() const {
     for (int f = 0; f < 8; f++) {
         for (int c = 0; c < 8; c++) {
             Pieza* p = tablero.getPieza(f, c);
-            if (p == nullptr) estado += '.';
+            if (p == nullptr) {
+                estado += '.';
+                estado += '.';
+
+            }
             else {
                 estado += p->getSimbolo();
                 estado += p->getColor();
@@ -294,6 +298,7 @@ void Partida::procesarTurno() {
     cout << "Turno de " << nombreTurno << " (" << colorTurno << ")" << endl;
     cout << "1. Mover pieza" << endl;
     cout << "0. Rendirse" << endl;
+    cout << "2. Guardar y salir" << endl;
 
     int opcion = -1;
     do {
@@ -303,7 +308,13 @@ void Partida::procesarTurno() {
             cin.ignore(1000, '\n');
             opcion = -1;
         }
-    } while (opcion < 0 || opcion > 1);
+    } while (opcion < 0 || opcion > 2);
+
+    if (opcion == 2) {
+        guardarPartida();
+        turno = -1;  // termina el loop de jugar() sin declarar ganador
+        return;
+    }
 
     if (opcion == 0) {
         string ganador      = (turno == TURNO_BLANCAS) ? jugador2 : jugador1;
@@ -473,7 +484,7 @@ void Partida::iniciar() {
 
 // ── Loop principal
 void Partida::jugar() {
-    iniciar();
+
 
     while (turno == TURNO_BLANCAS || turno == TURNO_NEGRAS) {
         mostrarEstado();
@@ -518,6 +529,12 @@ void Partida::guardarPartida() const {
         return;
     }
 
+    // Fecha y hora actual
+    time_t ahora = time(nullptr);
+    char fechaHora[64];
+    strftime(fechaHora, sizeof(fechaHora), "%Y-%m-%d %H:%M:%S", localtime(&ahora));
+
+
     archivo << jugador1 << "\n" << jugador2 << "\n";
     archivo << turno << "\n";
     archivo << contador50 << "\n";
@@ -550,7 +567,7 @@ bool Partida::cargarPartida() {
     }
 
     reiniciarEstado();
-    tablero.limpiar();
+
 
     getline(archivo, jugador1);
     getline(archivo, jugador2);
@@ -572,30 +589,30 @@ bool Partida::cargarPartida() {
     // Reconstruir tablero desde string de 64 chars
     // estado: cada casilla ocupa 2 chars (simbolo + color) o '.' para vacía
     int idx = 0;
-    for (int f = 0; f < 8 && idx < (int)estado.size(); f++) {
-        for (int c = 0; c < 8 && idx < (int)estado.size(); c++) {
-            if (estado[idx] == '.') {
+    for (int f = 0; f < 8 && idx + 1 < (int)estado.size(); f++) {
+        for (int c = 0; c < 8 && idx + 1 < (int)estado.size(); c++) {
+            char sim   = estado[idx];
+            char color = estado[idx + 1];
+            idx += 2;  // cada casilla SIEMPRE ocupa 2 caracteres
+
+            if (sim == '.') {
                 tablero.setPieza(f, c, nullptr);
-                idx++;
-            } else {
-                char sim   = estado[idx];
-                char color = estado[idx + 1];
-                idx += 2;
-                Pieza* p = nullptr;
-                switch(sim) {
-                    case 'P': p = new Peon   (color, f, c); break;
-                    case 'T': p = new Torre  (color, f, c); break;
-                    case 'C': p = new Caballo(color, f, c); break;
-                    case 'A': p = new Alfil  (color, f, c); break;
-                    case 'D': p = new Dama   (color, f, c); break;
-                    case 'R': p = new Rey    (color, f, c); break;
-                    default: break;
-                }
-                tablero.setPieza(f, c, p);
+                continue;
             }
+
+            Pieza* p = nullptr;
+            switch(sim) {
+                case 'P': p = new Peon   (color, f, c); break;
+                case 'T': p = new Torre  (color, f, c); break;
+                case 'C': p = new Caballo(color, f, c); break;
+                case 'A': p = new Alfil  (color, f, c); break;
+                case 'D': p = new Dama   (color, f, c); break;
+                case 'R': p = new Rey    (color, f, c); break;
+                default: break;
+            }
+            tablero.setPieza(f, c, p);
         }
     }
-
     cout << "Partida cargada correctamente." << endl;
     return true;
 }
