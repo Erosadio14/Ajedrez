@@ -564,8 +564,6 @@ void Partida::guardarPartida() const {
 bool Partida::cargarPartida() {
     ifstream archivo(ARCHIVO_PARTIDA);
 
-
-    archivo.open(ARCHIVO_PARTIDA);
     if (!archivo.is_open()) {
         cout << "Error: no se encontro el archivo " << ARCHIVO_PARTIDA << endl;
         return false;
