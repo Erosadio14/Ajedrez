@@ -61,6 +61,36 @@ void mostrarConsideraciones() {
     cout << "- Historial de movimientos visible en pantalla." << endl;
     cout << "- Guardar y cargar partida en archivo .txt." << endl;
     cout << endl;
+    cout << "1. Volver al menu" << endl;
+    cout << "2. Salir del juego" << endl;
+    int opcion = -1;
+    do {
+        cout << "Seleccione una opcion: ";
+        if (!(cin >> opcion)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            opcion = -1;
+        }
+        switch(opcion) {
+            case 1: break;
+            case 2:
+                cout << "Gracias por jugar." << endl;
+                exit(0);
+            default:
+                cout << "======== CONSIDERACIONES ======" << endl;
+                cout << "- Enroque con verificacion de jaque implementado." << endl;
+                cout << "- Peon al paso implementado." << endl;
+                cout << "- Jaque mate como condicion de fin de juego." << endl;
+                cout << "- Ahogado (stalemate) implementado." << endl;
+                cout << "- Tablas por repeticion de posicion (3 veces)." << endl;
+                cout << "- Regla de los 50 movimientos implementada." << endl;
+                cout << "- Historial de movimientos visible en pantalla." << endl;
+                cout << "- Guardar y cargar partida en archivo .txt." << endl;
+                cout << endl;
+                cout << "1. Volver al menu" << endl;
+                cout << "2. Salir del juego" << endl;
+        }
+    } while (opcion != 1);
 }
 
 
