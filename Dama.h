@@ -12,8 +12,10 @@ public:
     // Destructor
     ~Dama();
 
+    Pieza* clonar() const override;
+
     // Implementación del movimiento válido
-    bool movimientoValido(Tablero& tab, int fd, int cd) const override;
+    bool movimientoValido(const Tablero& tab, int fd, int cd) const override;
 };
 
 #endif // AJEDREZ_DAMA_H

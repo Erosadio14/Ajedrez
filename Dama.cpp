@@ -9,8 +9,12 @@ Dama::Dama(char color, int fila, int col)
 Dama::~Dama() {
 }
 
+Pieza* Dama::clonar() const {
+    return new Dama(*this); // crea una copia de la dama actual
+}
+
 // Movimiento válido: combina torre (líneas rectas) y alfil (diagonales)
-bool Dama::movimientoValido(Tablero& tab, int fd, int cd) const {
+bool Dama::movimientoValido(const Tablero& tab, int fd, int cd) const {
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 

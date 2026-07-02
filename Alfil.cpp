@@ -9,8 +9,12 @@ Alfil::Alfil(char color, int fila, int col)
 Alfil::~Alfil() {
 }
 
+Pieza* Alfil::clonar() const {
+    return new Alfil(*this); // crea una copia del alfil actual
+}
+
 // Movimiento válido: diagonal y camino libre
-bool Alfil::movimientoValido(Tablero& tab, int fd, int cd) const {
+bool Alfil::movimientoValido(const Tablero& tab, int fd, int cd) const {
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 
