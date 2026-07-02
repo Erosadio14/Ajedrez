@@ -1,6 +1,6 @@
 #ifndef AJEDREZ_CABALLO_H
 #define AJEDREZ_CABALLO_H
-
+//Permitir que caballo use esas clases
 #include "Pieza.h"
 #include "Tablero.h"
 

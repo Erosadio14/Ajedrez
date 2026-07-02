@@ -13,14 +13,14 @@ bool Torre::movimientoValido(Tablero& tab, int fd, int cd) const {
     // Debe moverse en la misma fila o columna
     if (fila != fd && col != cd) return false;
 
-    // Calcular pasos según dirección
+    // Moverse casilla por casilla en línea recta
     int pasoFila = (fd > fila) ? 1 : (fd < fila ? -1 : 0);
     int pasoCol  = (cd > col) ? 1 : (cd < col ? -1 : 0);
 
     int f = fila + pasoFila;
     int c = col + pasoCol;
 
-    // Recorrer camino hasta destino
+    // Impedir que la torre “salte” piezas
     while (f != fd || c != cd) {
         if (tab.getPieza(f, c) != nullptr) {
             return false; // hay una pieza bloqueando

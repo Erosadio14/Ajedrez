@@ -1,6 +1,7 @@
+//Proteger contra errores de duplicación.
 #ifndef AJEDREZ_TORRE_H
 #define AJEDREZ_TORRE_H
-
+//Permitir que la torre use esas clases
 #include "Pieza.h"
 #include "Tablero.h"
 

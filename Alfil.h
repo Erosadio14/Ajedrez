@@ -1,6 +1,7 @@
+// Proteger contra errores de duplicación
 #ifndef AJEDREZ_ALFIL_H
 #define AJEDREZ_ALFIL_H
-
+//Permitir que alfil use esas clases
 #include "Pieza.h"
 #include "Tablero.h"
 

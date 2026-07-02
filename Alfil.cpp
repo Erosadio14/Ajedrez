@@ -11,10 +11,11 @@ Alfil::~Alfil() {
 
 // Movimiento válido: diagonal y camino libre
 bool Alfil::movimientoValido(Tablero& tab, int fd, int cd) const {
+    // Saber si el movimiento es diagonal.
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 
-    // Debe moverse en diagonal
+    // Descartar movimientos rectos o inválidos
     if (df != dc) return false;
 
     // Verificar camino libre (no salta piezas)
@@ -23,7 +24,7 @@ bool Alfil::movimientoValido(Tablero& tab, int fd, int cd) const {
 
     int f = fila + pasoFila;
     int c = col + pasoCol;
-
+    // Impedir que el alfil “salte” piezas
     while (f != fd && c != cd) {
         if (tab.getPieza(f, c) != nullptr) {
             return false; // hay una pieza bloqueando

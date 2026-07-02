@@ -11,23 +11,24 @@ Dama::~Dama() {
 
 // Movimiento válido: combina torre (líneas rectas) y alfil (diagonales)
 bool Dama::movimientoValido(Tablero& tab, int fd, int cd) const {
+    // Calcular la cantidad de filas o columnas se movieron
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 
-    // Verificar si es movimiento de torre o alfil
+    // Verificar si es movimiento de torre o alfil valido
     bool esDiagonal = (df == dc);
     bool esRecto = (fila == fd || col == cd);
 
     if (!esDiagonal && !esRecto) return false;
 
-    // Calcular pasos según dirección
+    // Verificar movimiento valido si es diagonal o recto
     int pasoFila = (fd > fila) ? 1 : (fd < fila ? -1 : 0);
     int pasoCol  = (cd > col) ? 1 : (cd < col ? -1 : 0);
 
     int f = fila + pasoFila;
     int c = col + pasoCol;
 
-    // Recorrer camino hasta destino
+    // Recorrer camino segun la dirreccion
     while (f != fd || c != cd) {
         if (tab.getPieza(f, c) != nullptr) {
             return false; // hay una pieza bloqueando
