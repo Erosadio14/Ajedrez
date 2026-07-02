@@ -3,18 +3,18 @@
 #include <string>
 using namespace std;
 
-// ── Colores
+// Colores
 const int BLANCAS = 0;
 const int NEGRAS  = 1;
 
-// ── Turnos
+// Turnos
 const int TURNO_BLANCAS = 0;
 const int TURNO_NEGRAS  = 1;
 
-// ── Limites del tablero
+// Limites del tablero
 const int TAM_TABLERO = 8;
 
-// ── Reglas especiales
+// Reglas especiales
 const int MAX_MOVIMIENTOS_SIN_CAPTURA = 50;
 const int MAX_REPETICIONES            = 3;
 const int MAX_HISTORIAL               = 200;
@@ -34,7 +34,7 @@ const char ALFIL_N   = 'a';
 const char DAMA_N    = 'd';
 const char REY_N     = 'r';
 
-// ── Archivo de persistencia
+// Archivo de persistencia
 const char ARCHIVO_PARTIDA[] = "partida.txt";
 
 #endif

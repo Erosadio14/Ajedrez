@@ -6,7 +6,7 @@
 
 class Tablero {
 private:
-    Pieza* casillas[8][8]; // Matriz polimórfica de punteros
+    Pieza* casillas[8][8];
 
 public:
     Tablero();

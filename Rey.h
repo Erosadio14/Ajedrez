@@ -6,8 +6,6 @@
 
 class Rey : public Pieza {
 public:
-    // Constructor: recibe el color ('B' o 'N') y la posición inicial.
-    // El símbolo 'R' se asignará internamente en el constructor (Rey.cpp).
     Rey(char color, int fila, int col);
 
     // Destructor virtual

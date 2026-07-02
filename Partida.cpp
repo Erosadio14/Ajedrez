@@ -11,7 +11,7 @@
 
 using namespace std;
 
-// ── Constructor / Destructor
+// Constructor y Deatructor
 Partida::Partida() {
     reiniciarEstado();
 }
@@ -19,7 +19,7 @@ Partida::Partida() {
 Partida::~Partida() {
 }
 
-// ── Reiniciar estado
+// Reiniciar estado
 void Partida::reiniciarEstado() {
     turno          = TURNO_BLANCAS;
     numMovimientos = 0;
@@ -38,12 +38,12 @@ void Partida::reiniciarEstado() {
     torreNegroH_Mov  = false;
 }
 
-// ── Color actual como char
+// Color actual como char
 char Partida::colorActual() const {
     return (turno == TURNO_BLANCAS) ? 'B' : 'N';
 }
 
-// ── Inicializar piezas en el tablero ─────────────────────────────────────────
+// Inialización de piezas en el tablero
 void Partida::inicializarPiezas() {
     tablero.limpiar();
 
@@ -76,7 +76,7 @@ void Partida::inicializarPiezas() {
         tablero.setPieza(6, c, new Peon('N', 6, c));
 }
 
-// ── Verificar si movimiento deja al rey propio en jaque ──────────────────────
+// Verificar si movimiento deja al rey propio en jaque
 bool Partida::dejaPropioReyEnJaque(int fo, int co, int fd, int cd) const{
     Tablero* copia = tablero.clonar();
     copia->mover(fo, co, fd, cd);
@@ -85,7 +85,7 @@ bool Partida::dejaPropioReyEnJaque(int fo, int co, int fd, int cd) const{
     return enJaque;
 }
 
-// ── Registrar movimiento en historial ────────────────────────────────────────
+// Registrar movimiento en historial
 void Partida::registrarMovimiento(int fo, int co, int fd, int cd) {
     if (numMovimientos >= MAX_HISTORIAL) return;
 
@@ -101,7 +101,7 @@ void Partida::registrarMovimiento(int fo, int co, int fd, int cd) {
     numMovimientos++;
 }
 
-// ── Mostrar historial ─────────────────────────────────────────────────────────
+// Historial
 void Partida::mostrarHistorial() const {
     cout << "--- Historial (ultimos movimientos) ---" << endl;
     int inicio = (numMovimientos > 6) ? numMovimientos - 6 : 0;
@@ -115,7 +115,7 @@ void Partida::mostrarHistorial() const {
     cout << "---------------------------------------" << endl;
 }
 
-// ── Estado del tablero como string 64 chars ───────────────────────────────────
+// Estado del tablero guardado como string
 string Partida::estadoTablero() const {
     string estado = "";
     for (int f = 0; f < 8; f++) {
@@ -135,7 +135,7 @@ string Partida::estadoTablero() const {
     return estado;
 }
 
-// ── Verificar repeticion de posicion ─────────────────────────────────────────
+// Verificar repeticion de posicion
 bool Partida::verificarRepeticion() {
     string estado = estadoTablero();
     int count = 0;
@@ -147,12 +147,12 @@ bool Partida::verificarRepeticion() {
     return count >= MAX_REPETICIONES - 1;
 }
 
-// ── Verificar regla 50 movimientos ───────────────────────────────────────────
+// Verificar regla 50 movimientos
 bool Partida::verificar50Movimientos() const {
     return contador50 >= MAX_MOVIMIENTOS_SIN_CAPTURA * 2;
 }
 
-// ── Verificar si tiene movimientos legales ────────────────────────────────────
+// Verificar si existen movimieentos reales
 bool Partida::tieneMovimientosLegales() {
     char color = colorActual();
     for (int fo = 0; fo < 8; fo++) {
@@ -173,17 +173,17 @@ bool Partida::tieneMovimientosLegales() {
     return false;
 }
 
-// ── Jaque mate ────────────────────────────────────────────────────────────────
+// Jaque mate?
 bool Partida::esJaqueMate() {
     return tablero.estaEnJaque(colorActual()) && !tieneMovimientosLegales();
 }
 
-// ── Ahogado ───────────────────────────────────────────────────────────────────
+// Ahogado?
 bool Partida::esAhogado() {
     return !tablero.estaEnJaque(colorActual()) && !tieneMovimientosLegales();
 }
 
-// ── Manejar enroque ───────────────────────────────────────────────────────────
+// Enroque
 bool Partida::manejarEnroque(int fo, int co, int fd, int cd) {
     Pieza* pieza = tablero.getPieza(fo, co);
     if (pieza == nullptr || pieza->getSimbolo() != 'R') return false;
@@ -209,7 +209,6 @@ bool Partida::manejarEnroque(int fo, int co, int fd, int cd) {
         if (largo && torreNegroA_Mov) { cout << "\n***** La torre A negra ya se ha movido *****\n"; return false; }
     }
 
-    // Verificar casillas libres
     if (corto) {
         if (tablero.getPieza(fila, 5) != nullptr || tablero.getPieza(fila, 6) != nullptr) {
             cout << "\n***** Hay piezas entre el rey y la torre *****\n"; return false;
@@ -221,13 +220,11 @@ bool Partida::manejarEnroque(int fo, int co, int fd, int cd) {
         }
     }
 
-    // Verificar jaque en casillas de paso
     if (tablero.estaEnJaque(color)) {
         cout << "\n***** No puedes enrocar estando en jaque *****\n"; return false;
     }
 
     int colPaso = corto ? 5 : 3;
-    // CORRECTO — simular en copia sin tocar el tablero real
     Tablero* copia = tablero.clonar();
     copia->mover(fo, co, fila, colPaso);
     if (copia->estaEnJaque(color)) {
@@ -253,7 +250,7 @@ bool Partida::manejarEnroque(int fo, int co, int fd, int cd) {
     return true;
 }
 
-// ── Manejar peon al paso ──────────────────────────────────────────────────────
+// Peon al ´paso
 bool Partida::manejarPeonAlPaso(int fo, int co, int fd, int cd) {
     Pieza* pieza = tablero.getPieza(fo, co);
     if (pieza == nullptr || pieza->getSimbolo() != 'P') return false;
@@ -278,13 +275,13 @@ bool Partida::manejarPeonAlPaso(int fo, int co, int fd, int cd) {
     return true;
 }
 
-// ── Mostrar estado (tablero + historial) ──────────────────────────────────────
+// Mostrar estado (tablero e historial)
 void Partida::mostrarEstado() const {
     cout << tablero;
     if (numMovimientos > 0) mostrarHistorial();
 }
 
-// ── Procesar turno
+// Procesar turno
 void Partida::procesarTurno() {
     string nombreTurno  = (turno == TURNO_BLANCAS) ? jugador1 : jugador2;
     string colorTurno   = (turno == TURNO_BLANCAS) ? "BLANCAS" : "NEGRAS";
@@ -312,7 +309,7 @@ void Partida::procesarTurno() {
 
     if (opcion == 2) {
         guardarPartida();
-        turno = -1;  // termina el loop de jugar() sin declarar ganador
+        turno = -1;
         return;
     }
 
@@ -326,7 +323,6 @@ void Partida::procesarTurno() {
         return;
     }
 
-    // Leer casillas
     string entradaOrigen, entradaDestino;
     int fo, co, fd, cd;
 
@@ -468,7 +464,7 @@ void Partida::procesarTurno() {
     turno = (turno == TURNO_BLANCAS) ? TURNO_NEGRAS : TURNO_BLANCAS;
 }
 
-// ── Iniciar partida
+// Iniciar partida
 void Partida::iniciar() {
     reiniciarEstado();
     inicializarPiezas();
@@ -482,14 +478,13 @@ void Partida::iniciar() {
     cout << "\n¡Comienza el juego!" << endl;
 }
 
-// ── Loop principal
+// Loop principal
 void Partida::jugar() {
 
 
     while (turno == TURNO_BLANCAS || turno == TURNO_NEGRAS) {
         mostrarEstado();
 
-        // Verificar fin de juego
         if (esJaqueMate()) {
             string ganador      = (turno == TURNO_BLANCAS) ? jugador2 : jugador1;
             string colorGanador = (turno == TURNO_BLANCAS) ? "NEGRAS" : "BLANCAS";
@@ -521,7 +516,7 @@ void Partida::jugar() {
     }
 }
 
-// ── Guardar partida
+// Guardar partida
 void Partida::guardarPartida() const {
     ofstream archivo(ARCHIVO_PARTIDA);
 
@@ -560,7 +555,7 @@ void Partida::guardarPartida() const {
     cout << "Partida guardada en " << ARCHIVO_PARTIDA << endl;
 }
 
-// ── Cargar partida ────────────────────────────────────────────────────────────
+// Cargar partida
 bool Partida::cargarPartida() {
     ifstream archivo(ARCHIVO_PARTIDA);
 
@@ -589,8 +584,6 @@ bool Partida::cargarPartida() {
     getline(archivo, estado);
     archivo.close();
 
-    // Reconstruir tablero desde string de 64 chars
-    // estado: cada casilla ocupa 2 chars (simbolo + color) o '.' para vacía
     int idx = 0;
     for (int f = 0; f < 8 && idx + 1 < (int)estado.size(); f++) {
         for (int c = 0; c < 8 && idx + 1 < (int)estado.size(); c++) {
