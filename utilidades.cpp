@@ -27,8 +27,8 @@ bool parsearCasilla(const string& entrada, int& fila, int& col) {
     if (columna < 'A' || columna > 'H') return false;
     if (filaCar  < '1' || filaCar  > '8') return false;
 
-    col  = columna - 'A';   // 'A'→0, 'H'→7
-    fila = filaCar  - '1';  // '1'→0, '8'→7
+    col  = columna - 'A';
+    fila = filaCar  - '1';
 
     return true;
 }
@@ -48,7 +48,7 @@ void mensajeInvalido(const char* motivo) {
 
 string coordAString(int fila, int col) {
     string resultado = "";
-    resultado += (char)('A' + col);   // col 0→'A', col 4→'E'
-    resultado += (char)('1' + fila);  // fila 0→'1', fila 6→'7'
+    resultado += (char)('A' + col);
+    resultado += (char)('1' + fila);
     return resultado;
 }

@@ -34,7 +34,7 @@ bool Dama::movimientoValido(const Tablero& tab, int fd, int cd) const {
     // Recorrer camino hasta destino
     while (f != fd || c != cd) {
         if (tab.getPieza(f, c) != nullptr) {
-            return false; // hay una pieza bloqueando
+            return false;
         }
         f += pasoFila;
         c += pasoCol;

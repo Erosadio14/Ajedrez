@@ -21,7 +21,6 @@ bool Alfil::movimientoValido(const Tablero& tab, int fd, int cd) const {
     // Debe moverse en diagonal
     if (df != dc) return false;
 
-    // Verificar camino libre (no salta piezas)
     int pasoFila = (fd > fila) ? 1 : -1;
     int pasoCol  = (cd > col) ? 1 : -1;
 
@@ -30,13 +29,12 @@ bool Alfil::movimientoValido(const Tablero& tab, int fd, int cd) const {
 
     while (f != fd && c != cd) {
         if (tab.getPieza(f, c) != nullptr) {
-            return false; // hay una pieza bloqueando
+            return false;
         }
         f += pasoFila;
         c += pasoCol;
     }
 
-    // Última casilla: puede estar vacía o tener pieza enemiga
     Pieza* destino = tab.getPieza(fd, cd);
     if (destino == nullptr || destino->getColor() != color) {
         return true;

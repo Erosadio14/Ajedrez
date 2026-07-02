@@ -2,7 +2,7 @@
 #include "Partida.h"
 using namespace std;
 
-// ── Funciones del menu ───────────────────────────────────────────────────────
+// Menu
 
 void mostrarInstrucciones() {
     cout << "======= INSTRUCCIONES =======" << endl;

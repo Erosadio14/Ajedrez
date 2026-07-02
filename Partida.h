@@ -12,19 +12,19 @@ using namespace std;
 class Partida {
 private:
     Tablero tablero;
-    int turno;                          // TURNO_BLANCAS o TURNO_NEGRAS
-    string jugador1;                    // nombre jugador blancas
-    string jugador2;                    // nombre jugador negras
+    int turno;
+    string jugador1;
+    string jugador2;
 
     // Historial de movimientos
-    string historial[MAX_HISTORIAL];    // "PB E2->E4"
-    int numMovimientos;                 // cantidad de movimientos registrados
+    string historial[MAX_HISTORIAL];
+    int numMovimientos;
 
     // Regla de los 50 movimientos
     int contador50;
 
     // Repeticion de posicion
-    string posiciones[MAX_HISTORIAL];   // estado del tablero en cada turno (64 chars)
+    string posiciones[MAX_HISTORIAL];
     int numPosiciones;
 
     // Peon al paso
@@ -39,8 +39,6 @@ private:
     bool torreBlancoH_Mov;
     bool torreNegroA_Mov;
     bool torreNegroH_Mov;
-
-    // ── Metodos privados ──────────────────────────────────────────────────────
 
     // Inicializar piezas en el tablero
     void inicializarPiezas();

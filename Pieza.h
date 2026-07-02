@@ -5,43 +5,42 @@
 #include <string>
 using namespace std;
 
-//Declaracion adelantada para evitar inclusion circular
 class Tablero;
 
 class Pieza {
 protected:
-    char color;     // 'B' = blanca, 'N' = negra
-    char simbolo;   // 'P', 'T', 'C', 'A', 'D', 'R' (mayuscula siempre)
-    int fila;       // 0-7 (indice interno del tablero)
-    int col;        // 0-7 (indice interno del tablero)
+    char color;
+    char simbolo;
+    int fila;
+    int col;
 
 public:
-    // ── Constructor y destructor
+    // Constructor y destructor
     Pieza(char color, char simbolo, int fila, int col);
     virtual ~Pieza();
 
-    // ── Metodo puro virtual: cada subclase define su movimiento
+    // Metodo puro virtual: cada subclase define su movimiento
     virtual bool movimientoValido(const Tablero& tab, int fd, int cd) const = 0;
     virtual Pieza* clonar() const = 0;
 
-    // ── Getters
+    // Getters
     char getColor()   const;
     char getSimbolo() const;
     int  getFila()    const;
     int  getCol()     const;
 
-    // ── Helpers de color
+    // Helpers de color
     bool esBlanca() const;
     bool esNegra()  const;
 
-    // ── Representacion visual de 2 letras: "PB", "TN", etc.
+    // Representacion visual de 2 letras: "PB", "TN", etc.
     // Virtual para que subclases puedan sobreescribirlo si es necesario
     virtual string getSimbolo2L() const;
 
-    // ── Actualizar posicion cuando la pieza se mueve
+    // Actualizar posicion cuando la pieza se mueve
     void setPosicion(int nuevaFila, int nuevaCol);
 
-    // ── Sobrecarga de operator<< para imprimir la pieza
+    // Sobrecarga de operator<< para imprimir la pieza
     friend ostream& operator<<(ostream& os, const Pieza& p);
 };
 
