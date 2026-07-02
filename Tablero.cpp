@@ -61,7 +61,7 @@ bool Tablero::mover(int filO, int colO, int filD, int colD) {
     return true;
 }
 
-bool Tablero::estaEnJaque(char color) {
+bool Tablero::estaEnJaque(char color) const{
     int filRey = -1, colRey = -1;
 
     for (int i = 0; i < 8; ++i) {
@@ -96,30 +96,31 @@ Tablero* Tablero::clonar() const {
     Tablero* copia = new Tablero();
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            // Temporalmente solo inicializamos la copia como un tablero limpio.
-            // se cambiará por: copia->casillas[i][j] = this->casillas[i][j]->clonar();
-            copia->casillas[i][j] = nullptr; 
+            if (casillas[i][j] != nullptr) {
+                copia->casillas[i][j] = casillas[i][j]->clonar();
+            } else {
+                copia->casillas[i][j] = nullptr;
+            }
         }
     }
     return copia;
 }
 
 std::ostream& operator<<(std::ostream& os, const Tablero& tablero) {
-    os << "   a   b   c   d   e   f   g   h\n";
-    os << " +---+---+---+---+---+---+---+---+\n";
-    for (int i = 0; i < 8; ++i) {
-        os << 8 - i << " |"; 
-        for (int j = 0; j < 8; ++j) {
+    os << "\n    A   B   C   D   E   F   G   H\n";
+
+    for (int i = 7; i >= 0; i--) {
+        os << " " << i + 1 << " ";
+        for (int j = 0; j < 8; j++) {
             if (tablero.casillas[i][j] == nullptr) {
-                os << "   |";
+                os << "[  ]";
             } else {
-                os << " " << tablero.casillas[i][j]->getSimbolo2L() << "|";
+                os << "[" << tablero.casillas[i][j]->getSimbolo2L() << "]";
             }
         }
-        os << " " << 8 - i << "\n";
-        os << " +---+---+---+---+---+---+---+---+\n";
+        os << "\n";
     }
-    os << "   a   b   c   d   e   f   g   h\n";
+    os << "\n";
     return os;
 }
 

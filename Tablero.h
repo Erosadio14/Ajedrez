@@ -21,7 +21,7 @@ public:
     void setPieza(int fila, int col, Pieza* pieza);
 
     // Lógica para detectar jaques (usa Tablero& modificable debido a Pieza.h)
-    bool estaEnJaque(char color);
+    bool estaEnJaque(char color) const;
 
     // Clonación segura para simulaciones de jugadas futuras
     Tablero* clonar() const;

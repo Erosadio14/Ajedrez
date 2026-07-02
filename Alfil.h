@@ -10,11 +10,13 @@ public:
     // Constructor: recibe color, símbolo y posición inicial
     Alfil(char color, int fila, int col);
 
+    Pieza* clonar() const override;
+
     // Destructor
     ~Alfil();
 
     // Implementación del movimiento válido
-    bool movimientoValido(Tablero& tab, int fd, int cd) const override;
+    bool movimientoValido(const Tablero& tab, int fd, int cd) const override;
 };
 
 #endif // AJEDREZ_ALFIL_H

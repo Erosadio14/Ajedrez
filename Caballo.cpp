@@ -11,11 +11,10 @@ Caballo::~Caballo() {
 
 // Movimiento válido: en L (2+1 o 1+2)
 bool Caballo::movimientoValido(Tablero& tab, int fd, int cd) const {
-    // Saber si el movimiento cumple la forma de “L”
     int df = abs(fd - fila);
     int dc = abs(cd - col);
 
-    // descartar movimientos inválidos
+    // Movimiento en L
     if (!((df == 2 && dc == 1) || (df == 1 && dc == 2))) {
         return false;
     }
